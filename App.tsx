@@ -120,49 +120,45 @@ const App: React.FC = () => {
                 .join('\n\n');
 
             if (!changesList) {
-                return "You are an expert photo editor. Your task is to slightly enhance the quality and realism of this portrait. It is absolutely crucial that you preserve the person's identity, likeness, and all existing features with the highest possible fidelity. Do not make any creative changes.";
+                return "You are an expert medical illustrator. Your task is to enhance the clarity and scientific accuracy of this medical sketch/image. Preserve the original anatomical structure but make it look like a professional textbook illustration. Clean white background.";
             }
       
-            return `You are an expert photo editor. Your task is to meticulously edit the provided portrait.
-It is absolutely crucial to preserve the person's fundamental identity, likeness, and facial structure with the highest possible fidelity.
-Only apply the following specific changes, organized by category. Do not alter any features not explicitly mentioned.
+            return `You are an expert medical illustrator. Your task is to edit the provided medical image/sketch.
+It is crucial to preserve the fundamental anatomical structure.
+Apply the following specific changes to the pathology or style:
 
 ${changesList}
 
-All other details of the original photo must remain identical.`;
+Ensure the result is scientifically accurate and suitable for medical education.`;
         }
         
         // Text-to-Image Logic
-        const subjectParts = [getOptionLabel('age'), getOptionLabel('gender'), getOptionLabel('nationality')].filter(Boolean);
-        const subject = subjectParts.length > 0 ? subjectParts.join(' ') : 'a person';
-        const shotType = getOptionLabel('shot_type') || 'portrait';
-        const pose = getOptionLabel('pose');
-
-        let narrative = `Create a single, ultra-realistic, masterpiece ${shotType} of ${subject}.`;
-        if (pose) {
-            narrative += ` The subject is in a "${pose}" pose.`;
-        }
-
-        const characterDetails = (selectedOptionsByGroup['Character'] || [])
-            .filter(opt => !opt.startsWith('Gender:') && !opt.startsWith('Age:') && !opt.startsWith('Nationality:'));
-        const environmentDetails = selectedOptionsByGroup['Environment'] || [];
-
-        const sceneDetails = [...characterDetails, ...environmentDetails];
-        if (sceneDetails.length > 0) {
-            narrative += `\n\n**Scene & Subject Details:** ${sceneDetails.join('; ')}.`;
-        }
+        const system = getOptionLabel('system');
+        const organ = getOptionLabel('organ');
+        const subject = organ ? `${organ} (${system})` : (system || 'human anatomy');
         
-        const styleDetails = (selectedOptionsByGroup['Style'] || [])
-            .filter(opt => !opt.startsWith('Shot Type:'));
+        const view = getOptionLabel('view');
+        const section = getOptionLabel('section');
+        const magnification = getOptionLabel('magnification');
+        
+        let narrative = `Create a professional medical illustration of ${subject}.`;
+        
+        if (view) narrative += ` View: ${view}.`;
+        if (section) narrative += ` Section: ${section}.`;
+        if (magnification) narrative += ` Magnification: ${magnification}.`;
+
+        const pathologyDetails = selectedOptionsByGroup['Pathology & Condition'] || [];
+        if (pathologyDetails.length > 0) {
+             narrative += `\n\n**Pathology & Condition:** ${pathologyDetails.join('; ')}.`;
+        }
+
+        const styleDetails = selectedOptionsByGroup['Art Style'] || [];
         if (styleDetails.length > 0) {
             narrative += `\n\n**Artistic Style:** ${styleDetails.join('; ')}.`;
         }
         
-        const photographyDetails = (selectedOptionsByGroup['Photography'] || [])
-            .filter(opt => !opt.startsWith('Pose:'));
-        if (photographyDetails.length > 0) {
-            narrative += `\n\n**Photography Settings (EXIF Data):**\n- ${photographyDetails.join('\n- ')}.`;
-        }
+        // Add system prompt for consistency
+        narrative += `\n\n**System Requirement:** Professional medical illustration, scientifically accurate, clean white background (unless specified otherwise), high resolution, educational purpose, detailed anatomy, textbook style.`;
         
         narrative += `\n\n**Final Quality:** ${qualityEnhancers}`;
 

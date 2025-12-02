@@ -4,17 +4,14 @@
 <img width="1408" height="768" alt="generated-image-1758293106769" src="https://github.com/user-attachments/assets/85f125f5-2495-40f7-ada5-0905f5d05afc" />
 
 
-# 🍌 BananaFace：Your Pocket Stylist｜你的随身造型师
+# 🧬 MediSketch：AI Medical Illustrator｜医学绘影
 
 
-<img width="1723" height="1381" alt="Group 386" src="https://github.com/user-attachments/assets/eda5b74e-0305-4f6d-961e-0e178131ef26" />
+## 开源医学插画神器｜🧬 MediSketch｜医学绘影
 
 
-
-## 开源捏脸神器｜🍌 BananaFace｜香蕉造型师｜ZHO
-
-
-### 选择永远比填空更适合人类！高人物一致性，轻松捏脸/美容，呈现大师造型/肖像！
+### 专为医学生、科研人员、临床医生打造的 AI 插画工具。
+### 告别昂贵的 BioRender，告别手残党，用选择题的方式生成教科书级解剖图！
 
 
 
